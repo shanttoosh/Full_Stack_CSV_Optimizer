@@ -1,0 +1,536 @@
+            <!-- Layer 3: Deep Config -->
+            <div class="content-section" id="content-layer-3">
+                <div class="deep-config-container">
+                    <!-- CSV Preview Section -->
+                    <div class="csv-preview-section" id="csv-preview-section" style="display: none;">
+                        <div class="config-card">
+                            <div class="config-card-header">
+                                <div class="config-icon">📊</div>
+                                <div class="config-title">CSV Data Preview</div>
+                                <div class="preview-status" id="preview-status">Raw Data</div>
+                            </div>
+                            <div class="csv-preview-container">
+                                <div class="csv-table-wrapper">
+                                    <table class="csv-preview-table" id="csv-preview-table">
+                                        <thead id="csv-headers">
+                                            <!-- Headers will be populated dynamically -->
+                                        </thead>
+                                        <tbody id="csv-body">
+                                            <!-- Data will be populated dynamically -->
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Default Preprocessing Section -->
+                    <div class="default-preprocessing-section" id="default-preprocessing-section" style="display: none;">
+                        <div class="config-card">
+                            <div class="config-card-header">
+                                <div class="config-icon">⚡</div>
+                                <div class="config-title">Default Preprocessing</div>
+                            </div>
+                            <div class="preprocessing-list">
+                                <div class="preprocessing-item">
+                                    <div class="preprocessing-icon">✓</div>
+                                    <div class="preprocessing-text">Data Encoding Validation - UTF-8</div>
+                                    <div class="preprocessing-status" id="encoding-status">Pending</div>
+                                </div>
+                                <div class="preprocessing-item">
+                                    <div class="preprocessing-icon">✓</div>
+                                    <div class="preprocessing-text">Headers Validation</div>
+                                    <div class="preprocessing-status" id="headers-status">Pending</div>
+                                </div>
+                                <div class="preprocessing-item">
+                                    <div class="preprocessing-icon">✓</div>
+                                    <div class="preprocessing-text">Removal of White Space</div>
+                                    <div class="preprocessing-status" id="whitespace-status">Pending</div>
+                                </div>
+                            </div>
+                            <button class="btn btn-primary" onclick="runDefaultPreprocessing()" id="run-default-btn">
+                                Run Default Preprocessing
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Manual Preprocessing Section -->
+                    <div class="manual-preprocessing-section" id="manual-preprocessing-section" style="display: none;">
+                        
+                        <!-- Data Type Conversion -->
+                        <div class="config-card preprocessing-step" id="datatype-conversion-step">
+                            <div class="config-card-header">
+                                <div class="config-icon">🔄</div>
+                                <div class="config-title">Data Type Conversion</div>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Select column to handle data type conversion</label>
+                                <select class="form-control" id="datatype-column-select">
+                                    <option value="">Select a column...</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Select handling strategy:</label>
+                                <div class="radio-group">
+                                    <label class="radio-option">
+                                        <input type="radio" name="datatype-strategy" value="leave" checked>
+                                        <span>Leave as it</span>
+                                    </label>
+                                    <label class="radio-option">
+                                        <input type="radio" name="datatype-strategy" value="object">
+                                        <span>Object</span>
+                                    </label>
+                                    <label class="radio-option">
+                                        <input type="radio" name="datatype-strategy" value="numeric">
+                                        <span>Numeric</span>
+                                    </label>
+                                    <label class="radio-option">
+                                        <input type="radio" name="datatype-strategy" value="datetime">
+                                        <span>DateTime</span>
+                                    </label>
+                                    <label class="radio-option">
+                                        <input type="radio" name="datatype-strategy" value="bool">
+                                        <span>Boolean</span>
+                                    </label>
+                                </div>
+                            </div>
+                            <button class="btn btn-secondary" onclick="applyDataTypeConversion()">
+                                Apply Type Conversion
+                            </button>
+                        </div>
+
+                        <!-- Null Handling -->
+                        <div class="config-card preprocessing-step" id="null-handling-step" style="display: none;">
+                            <div class="config-card-header">
+                                <div class="config-icon">🚫</div>
+                                <div class="config-title">Null Values Handling</div>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Select column to handle nulls</label>
+                                <select class="form-control" id="null-column-select">
+                                    <option value="">Select a column...</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Select handling strategy:</label>
+                                <div class="radio-group">
+                                    <label class="radio-option">
+                                        <input type="radio" name="null-strategy" value="skip" checked>
+                                        <span>Skip / Leave as is</span>
+                                    </label>
+                                    <label class="radio-option">
+                                        <input type="radio" name="null-strategy" value="drop">
+                                        <span>Drop Rows</span>
+                                    </label>
+                                    <label class="radio-option">
+                                        <input type="radio" name="null-strategy" value="mean">
+                                        <span>Fill with Mean</span>
+                                    </label>
+                                    <label class="radio-option">
+                                        <input type="radio" name="null-strategy" value="median">
+                                        <span>Fill with Median</span>
+                                    </label>
+                                    <label class="radio-option">
+                                        <input type="radio" name="null-strategy" value="mode">
+                                        <span>Fill with Mode</span>
+                                    </label>
+                                    <label class="radio-option">
+                                        <input type="radio" name="null-strategy" value="custom">
+                                        <span>Fill with Custom Value</span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="form-group" id="custom-value-group" style="display: none;">
+                                <label class="form-label">Custom Value</label>
+                                <input type="text" class="form-control" id="custom-null-value" placeholder="Enter custom value">
+                            </div>
+                            <button class="btn btn-secondary" onclick="applyNullHandling()">
+                                Apply Null Handling
+                            </button>
+                        </div>
+
+                        <!-- Duplicate Handling -->
+                        <div class="config-card preprocessing-step" id="duplicate-handling-step" style="display: none;">
+                            <div class="config-card-header">
+                                <div class="config-icon">🔄</div>
+                                <div class="config-title">Duplicate Handling</div>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Select handling strategy:</label>
+                                <div class="radio-group">
+                                    <label class="radio-option">
+                                        <input type="radio" name="duplicate-strategy" value="remove" checked>
+                                        <span>Remove Duplicates</span>
+                                    </label>
+                                    <label class="radio-option">
+                                        <input type="radio" name="duplicate-strategy" value="leave">
+                                        <span>Leave as is</span>
+                                    </label>
+                                </div>
+                            </div>
+                            <button class="btn btn-secondary" onclick="applyDuplicateHandling()">
+                                Apply Duplicate Handling
+                            </button>
+                        </div>
+
+                        <!-- Text Processing -->
+                        <div class="config-card preprocessing-step" id="text-processing-step" style="display: none;">
+                            <div class="config-card-header">
+                                <div class="config-icon">📝</div>
+                                <div class="config-title">Text Processing</div>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Stop Word Removal:</label>
+                                <div class="radio-group">
+                                    <label class="radio-option">
+                                        <input type="radio" name="stopword-strategy" value="apply" checked>
+                                        <span>Apply Stopword Removal</span>
+                                    </label>
+                                    <label class="radio-option">
+                                        <input type="radio" name="stopword-strategy" value="skip">
+                                        <span>Skip</span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Text Normalization:</label>
+                                <div class="radio-group">
+                                    <label class="radio-option">
+                                        <input type="radio" name="normalization-strategy" value="lemmatization" checked>
+                                        <span>Apply Lemmatization</span>
+                                    </label>
+                                    <label class="radio-option">
+                                        <input type="radio" name="normalization-strategy" value="stemming">
+                                        <span>Apply Stemming</span>
+                                    </label>
+                                    <label class="radio-option">
+                                        <input type="radio" name="normalization-strategy" value="skip">
+                                        <span>Skip</span>
+                                    </label>
+                                </div>
+                            </div>
+                            <button class="btn btn-secondary" onclick="applyTextProcessing()">
+                                Apply Text Processing
+                            </button>
+                        </div>
+
+                        <!-- Download Preprocessed CSV -->
+                        <div class="config-card" id="download-preprocessed-section" style="display: none;">
+                            <div class="config-card-header">
+                                <div class="config-icon">💾</div>
+                                <div class="config-title">Manual Preprocessing Complete</div>
+                            </div>
+                            <button class="btn btn-success" onclick="downloadPreprocessedCSV()">
+                                Download Preprocessed CSV as ZIP
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Metadata Handling Section -->
+                    <div class="metadata-handling-section" id="metadata-handling-section" style="display: none;">
+                        <div class="config-card">
+                            <div class="config-card-header">
+                                <div class="config-icon">📋</div>
+                                <div class="config-title">Metadata Handling</div>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">How many numeric columns to include (store min/mean/max per chunk)</label>
+                                <input type="number" class="form-control" id="numeric-columns-count" value="2" min="0" max="10">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Select numeric columns</label>
+                                <select class="form-control" id="numeric-columns-select" multiple>
+                                    <!-- Options populated dynamically -->
+                                </select>
+                                <div class="selected-columns" id="selected-numeric-columns"></div>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">How many categorical columns to include</label>
+                                <input type="number" class="form-control" id="categorical-columns-count" value="3" min="0" max="10">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Select categorical columns</label>
+                                <select class="form-control" id="categorical-columns-select" multiple>
+                                    <!-- Options populated dynamically -->
+                                </select>
+                                <div class="selected-columns" id="selected-categorical-columns"></div>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Storage Option:</label>
+                                <div class="radio-group">
+                                    <label class="radio-option">
+                                        <input type="radio" name="metadata-storage" value="store" checked>
+                                        <span>Store metadata in DB</span>
+                                    </label>
+                                    <label class="radio-option">
+                                        <input type="radio" name="metadata-storage" value="skip">
+                                        <span>Skip</span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Chunking Section -->
+                    <div class="chunking-section" id="chunking-section" style="display: none;">
+                        <div class="config-card">
+                            <div class="config-card-header">
+                                <div class="config-icon">✂️</div>
+                                <div class="config-title">CSV Chunking</div>
+                            </div>
+                            <button class="btn btn-primary" onclick="startChunking()" id="start-chunking-btn">
+                                Start Chunking
+                            </button>
+                        </div>
+
+                        <!-- Chunking Process -->
+                        <div class="config-card" id="chunking-process-section" style="display: none;">
+                            <div class="config-card-header">
+                                <div class="config-icon">⚙️</div>
+                                <div class="config-title">CSV Chunking Process</div>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Choose a chunking method:</label>
+                                <div class="radio-group">
+                                    <label class="radio-option">
+                                        <input type="radio" name="chunking-method" value="fixed" checked>
+                                        <span>Fixed Size Chunking</span>
+                                    </label>
+                                    <label class="radio-option">
+                                        <input type="radio" name="chunking-method" value="document">
+                                        <span>Document Based Chunking</span>
+                                    </label>
+                                    <label class="radio-option">
+                                        <input type="radio" name="chunking-method" value="semantic">
+                                        <span>Semantic Chunking</span>
+                                    </label>
+                                    <label class="radio-option">
+                                        <input type="radio" name="chunking-method" value="recursive">
+                                        <span>Recursive</span>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <!-- Fixed Size Parameters -->
+                            <div class="chunking-parameters" id="fixed-parameters">
+                                <div class="form-group">
+                                    <label class="form-label">Chunk Size (rows)</label>
+                                    <input type="number" class="form-control" id="fixed-chunk-size" value="100" min="10" max="10000">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Overlap (rows)</label>
+                                    <input type="number" class="form-control" id="fixed-overlap" value="0" min="0" max="1000">
+                                </div>
+                            </div>
+
+                            <!-- Document Based Parameters -->
+                            <div class="chunking-parameters" id="document-parameters" style="display: none;">
+                                <div class="form-group">
+                                    <label class="form-label">Select key column for grouping:</label>
+                                    <select class="form-control" id="document-key-column">
+                                        <!-- Options populated dynamically -->
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Token limit per chunk</label>
+                                    <input type="number" class="form-control" id="document-token-limit" value="2000" min="100" max="50000">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Token counting model</label>
+                                    <select class="form-control" id="document-token-model">
+                                        <option value="gpt-4">GPT-4</option>
+                                        <option value="gpt-3.5-turbo">GPT-3.5 Turbo</option>
+                                        <option value="clk_100_base">CLK-100 Base</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- Semantic Parameters -->
+                            <div class="chunking-parameters" id="semantic-parameters" style="display: none;">
+                                <div class="form-group">
+                                    <label class="form-label">Number of clusters</label>
+                                    <input type="number" class="form-control" id="semantic-clusters" value="2" min="2" max="100">
+                                </div>
+                                <div class="range-group">
+                                    <label class="form-label">Threshold frequency</label>
+                                    <input type="range" class="range-slider" id="semantic-threshold" min="0.10" max="0.90" value="0.50" step="0.01" oninput="updateRangeValue('semantic-threshold', 'semantic-threshold-value')">
+                                    <div class="range-labels">
+                                        <span>0.10</span>
+                                        <span class="range-value" id="semantic-threshold-value">0.50</span>
+                                        <span>0.90</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Recursive Parameters -->
+                            <div class="chunking-parameters" id="recursive-parameters" style="display: none;">
+                                <div class="form-group">
+                                    <label class="form-label">Chunk Size (rows)</label>
+                                    <input type="number" class="form-control" id="recursive-chunk-size" value="100" min="10" max="10000">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Overlap (rows)</label>
+                                    <input type="number" class="form-control" id="recursive-overlap" value="0" min="0" max="1000">
+                                </div>
+                            </div>
+
+                            <button class="btn btn-success" onclick="applyChunkingMethod()">
+                                Apply Chunking Method
+                            </button>
+                        </div>
+
+                        <!-- Chunking Complete -->
+                        <div class="config-card" id="chunking-complete-section" style="display: none;">
+                            <div class="config-card-header">
+                                <div class="config-icon">✅</div>
+                                <div class="config-title">Chunking Complete</div>
+                            </div>
+                            <div class="action-buttons-inline">
+                                <button class="btn btn-success" onclick="downloadChunksAsZip()">
+                                    Download All Chunks as ZIP
+                                </button>
+                                <button class="btn btn-secondary" onclick="startNewChunking()">
+                                    Start New Chunking
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Embeddings Section -->
+                    <div class="embeddings-section" id="embeddings-section" style="display: none;">
+                        <div class="config-card">
+                            <div class="config-card-header">
+                                <div class="config-icon">🧠</div>
+                                <div class="config-title">Generate Embeddings</div>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Choose an embedding model:</label>
+                                <div class="radio-group">
+                                    <label class="radio-option">
+                                        <input type="radio" name="embedding-model" value="all-MiniLM-L6-v2" checked>
+                                        <span>all-MiniLM-L6-v2 - Default - Fast & Efficient</span>
+                                    </label>
+                                    <label class="radio-option">
+                                        <input type="radio" name="embedding-model" value="BAAI/bge-small-en-v1.5">
+                                        <span>BAAI/bge-small-en-v1.5 - High Accuracy</span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Batch size</label>
+                                <select class="form-control" id="embedding-batch-size">
+                                    <option value="32">32</option>
+                                    <option value="64" selected>64</option>
+                                    <option value="128">128</option>
+                                </select>
+                            </div>
+                            <button class="btn btn-primary" onclick="generateEmbeddings()">
+                                Generate Embeddings
+                            </button>
+                        </div>
+
+                        <!-- Embeddings Complete -->
+                        <div class="config-card" id="embeddings-complete-section" style="display: none;">
+                            <div class="config-card-header">
+                                <div class="config-icon">✅</div>
+                                <div class="config-title">Embeddings Complete</div>
+                            </div>
+                            <div class="action-buttons-inline">
+                                <button class="btn btn-success" onclick="downloadEmbeddingsAsJson()">
+                                    Download Embeddings as JSON
+                                </button>
+                                <button class="btn btn-secondary" onclick="startNewEmbeddingsProcess()">
+                                    Start New Embeddings Process
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Storing Section -->
+                    <div class="storing-section" id="storing-section" style="display: none;">
+                        <div class="config-card">
+                            <div class="config-card-header">
+                                <div class="config-icon">💾</div>
+                                <div class="config-title">Start Storing Process</div>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Select model:</label>
+                                <div class="radio-group">
+                                    <label class="radio-option">
+                                        <input type="radio" name="storage-model" value="chroma" checked>
+                                        <span>Chroma DB</span>
+                                    </label>
+                                    <label class="radio-option">
+                                        <input type="radio" name="storage-model" value="faiss">
+                                        <span>FAISS</span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Storing Settings</label>
+                                <div class="storing-settings">
+                                    <div class="form-group">
+                                        <label class="form-label">Persist Directory</label>
+                                        <input type="text" class="form-control" id="persist-directory" value=".chroma" placeholder=".chroma">
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label">Collection Name</label>
+                                        <input type="text" class="form-control" id="collection-name" value="csv_chunks" placeholder="csv_chunks">
+                                    </div>
+                                </div>
+                            </div>
+                            <button class="btn btn-primary" onclick="startStoringProcess()">
+                                Start Storing Process
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Retrieval Section -->
+                    <div class="retrieval-section" id="retrieval-section" style="display: none;">
+                        <div class="config-card">
+                            <div class="config-card-header">
+                                <div class="config-icon">🔍</div>
+                                <div class="config-title">Retrieval Testing</div>
+                            </div>
+                            <p class="section-description">Test your vector search with sample queries</p>
+                            
+                            <div class="form-group">
+                                <label class="form-label">Search Configuration</label>
+                                <div class="search-config-grid">
+                                    <div class="form-group">
+                                        <label class="form-label">Similarity Metric:</label>
+                                        <select class="form-control" id="similarity-metric">
+                                            <option value="cosine" selected>Cosine</option>
+                                            <option value="dot">Dot Product</option>
+                                            <option value="euclidean">Euclidean</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label">Top K Results</label>
+                                        <input type="number" class="form-control" id="top-k-results" value="5" min="1" max="50">
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <button class="btn btn-success" onclick="completeProcess()">
+                                Complete Process
+                            </button>
+                        </div>
+
+                        <!-- Query Interface -->
+                        <div class="config-card" id="query-interface-section" style="display: none;">
+                            <div class="config-card-header">
+                                <div class="config-icon">🔍</div>
+                                <div class="config-title">Query Interface</div>
+                            </div>
+                            <div class="query-bar">
+                                <input type="text" class="query-input" id="deep-config-query-input" placeholder="Enter your search query...">
+                                <div class="query-icon" onclick="performDeepConfigQuery()" id="deep-config-query-icon">🔍</div>
+                            </div>
+                            <div class="query-results" id="deep-config-query-results">
+                                <!-- Query results will be populated here -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>

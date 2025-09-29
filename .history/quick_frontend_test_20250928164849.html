@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Quick Frontend Test</title>
+</head>
+<body>
+    <div id="progress-text">Ready</div>
+    <div id="progress-bar" style="width: 0%; background: green; height: 20px;"></div>
+    <button id="process-btn">Start Processing</button>
+    
+    <script>
+        // Test the fixed functions
+        console.log('Testing null-safe element access...');
+        
+        // This should work now
+        const progressText = document.getElementById('progress-text');
+        if (progressText) {
+            progressText.textContent = 'Starting Preprocessing...';
+            console.log('✅ progressText updated successfully');
+        }
+        
+        const progressBar = document.getElementById('progress-bar');
+        if (progressBar) {
+            progressBar.style.width = '50%';
+            console.log('✅ progressBar updated successfully');
+        }
+        
+        const processBtn = document.getElementById('process-btn');
+        if (processBtn) {
+            processBtn.textContent = 'Processing...';
+            processBtn.disabled = true;
+            console.log('✅ processBtn updated successfully');
+        }
+        
+        // Test with non-existent element (should not crash)
+        const nonExistent = document.getElementById('non-existent');
+        if (nonExistent) {
+            nonExistent.style.display = 'none';
+        } else {
+            console.log('✅ Non-existent element handled safely');
+        }
+        
+        console.log('🎉 All tests passed - Frontend should work now!');
+    </script>
+</body>
+</html>

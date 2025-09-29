@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test Alignment Fix</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; background: #1a202c; color: white; }
+        .test-section { margin: 20px 0; padding: 15px; border: 1px solid #4a5568; border-radius: 8px; }
+        .step-container { display: flex; align-items: center; margin: 10px 0; }
+        .step-timing { font-size: 10px; margin-left: 8px; opacity: 0.6; font-weight: 500; color: #ccc; flex-shrink: 0; }
+        .step-status { font-size: 10px; margin-left: 8px; flex-shrink: 0; width: 20px; height: 20px; display: flex; align-items: center; justify-content: center; border-radius: 50%; background: transparent; color: #4a5568; position: relative; border: 2px solid #4a5568; font-weight: 500; }
+        .step-status.completed { color: #10b981; border-color: #10b981; font-size: 8px; font-weight: 600; }
+        .step-name { flex: 1; }
+    </style>
+</head>
+<body>
+    <h2>🧪 Alignment Fix Test</h2>
+    
+    <div class="test-section">
+        <h3>✅ FIXED: Proper Separation</h3>
+        <div class="step-container">
+            <div class="step-name">Preprocessing</div>
+            <div class="step-timing">4.2s</div>
+            <div class="step-status completed">✓</div>
+        </div>
+        <div class="step-container">
+            <div class="step-name">Chunking</div>
+            <div class="step-timing">13.5s</div>
+            <div class="step-status completed">✓</div>
+        </div>
+        <div class="step-container">
+            <div class="step-name">Embedding</div>
+            <div class="step-timing">2.1s</div>
+            <div class="step-status completed">✓</div>
+        </div>
+    </div>
+    
+    <div class="test-section">
+        <h3>📊 Expected Result:</h3>
+        <ul>
+            <li>✅ <strong>Grey timing text</strong> (4.2s, 13.5s, 2.1s) - shows in step-timing</li>
+            <li>✅ <strong>Green completion indicator</strong> (✓) - shows in step-status</li>
+            <li>✅ <strong>No overlap</strong> - elements are properly separated</li>
+            <li>✅ <strong>Proper alignment</strong> - everything lines up correctly</li>
+        </ul>
+    </div>
+    
+    <div class="test-section">
+        <h3>🎯 What Changed:</h3>
+        <ul>
+            <li><code>updateStepLiveTime()</code> - Uses step-timing for seconds, clears step-status</li>
+            <li><code>updateStepCompletionTime()</code> - Uses step-timing for final time, step-status for "Completed"</li>
+            <li><code>updateStepStatus()</code> - Clears both elements when starting active state</li>
+            <li>CSS - Improved font sizes and weights for better visibility</li>
+        </ul>
+    </div>
+</body>
+</html>

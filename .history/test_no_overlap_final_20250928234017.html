@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Final No Overlap Layout</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; background: #1a202c; color: white; }
+        .demo-container { width: 300px; background: #2d3748; padding: 15px; border-radius: 8px; }
+        
+        .process-step {
+            display: flex;
+            align-items: center;
+            padding: 8px 12px;
+            margin: 4px 0;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.05);
+            position: relative;
+        }
+        
+        .process-step.active::before {
+            content: '';
+            position: absolute;
+            right: 0;
+            top: 0;
+            height: 100%;
+            width: 4px;
+            background: linear-gradient(135deg, #f26f21, #e55a00);
+        }
+        
+        .process-step.completed::before {
+            content: '';
+            position: absolute;
+            right: 0;
+            top: 0;
+            height: 100%;
+            width: 4px;
+            background: linear-gradient(135deg, #10b981, #059669);
+        }
+        
+        .step-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            position: relative;
+            z-index: 1;
+            min-height: 28px;
+        }
+        
+        .step-details {
+            flex: 1;
+            min-width: 0;
+            max-width: calc(100% - 160px);
+        }
+        
+        .step-right-container {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            flex-shrink: 0;
+            white-space: nowrap;
+            min-width: 150px;
+            justify-content: flex-end;
+        }
+        
+        .step-title {
+            font-weight: 600;
+            font-size: 13px;
+            margin-bottom: 2px;
+            color: white;
+        }
+        
+        .step-description {
+            font-size: 11px;
+            opacity: 0.7;
+            color: #fff;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        
+        .step-status-text {
+            font-size: 9px;
+            font-weight: 500;
+            color: #10b981;
+            opacity: 0.9;
+            flex-shrink: 0;
+            text-align: right;
+            min-width: 60px;
+            max-width: 60px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        
+        .step-timing {
+            font-size: 9px;
+            font-weight: 500;
+            color: #ccc;
+            opacity: 0.8;
+            flex-shrink: 0;
+            text-align: right;
+            min-width: 25px;
+            max-width: 25px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        
+        .step-status {
+            font-size: 11px;
+            margin-left: 0;
+            flex-shrink: 0;
+            width: 18px;
+            height: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background: transparent;
+            color: #4a5568;
+            position: relative;
+            border: 2px solid #4a5568;
+        }
+        
+        .process-step.active .step-status {
+            color: #f26f21;
+            border-color: #f26f21;
+        }
+        
+        .process-step.active .step-status::before {
+            content: '↻';
+            font-size: 12px;
+            font-weight: bold;
+            animation: arrowRotate 1s linear infinite;
+        }
+        
+        .process-step.completed .step-status {
+            color: #10b981;
+            border-color: #10b981;
+        }
+        
+        .process-step.completed .step-status::before {
+            content: '';
+            position: absolute;
+            width: 6px;
+            height: 3px;
+            border-left: 1.5px solid #10b981;
+            border-bottom: 1.5px solid #10b981;
+            transform: rotate(-45deg);
+            margin-left: 0.5px;
+        }
+        
+        @keyframes arrowRotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <h2>✅ FINAL: Perfect Layout - No Overlapping</h2>
+    
+    <div class="demo-container">
+        <h3 style="margin-top: 0;">Processing Pipeline</h3>
+        
+        <div class="process-step completed">
+            <div class="step-content">
+                <div class="step-details">
+                    <div class="step-title">File Upload</div>
+                    <div class="step-description">Load CSV data</div>
+                </div>
+                <div class="step-right-container">
+                    <div class="step-status-text">Completed</div>
+                    <div class="step-timing">1s</div>
+                    <div class="step-status"></div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="process-step active">
+            <div class="step-content">
+                <div class="step-details">
+                    <div class="step-title">Preprocessing</div>
+                    <div class="step-description">Header validation, whitespace removal</div>
+                </div>
+                <div class="step-right-container">
+                    <div class="step-status-text">Processing</div>
+                    <div class="step-timing">9s</div>
+                    <div class="step-status"></div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="process-step">
+            <div class="step-content">
+                <div class="step-details">
+                    <div class="step-title">Chunking</div>
+                    <div class="step-description">Split into chunks</div>
+                </div>
+                <div class="step-right-container">
+                    <div class="step-status-text"></div>
+                    <div class="step-timing"></div>
+                    <div class="step-status"></div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="process-step">
+            <div class="step-content">
+                <div class="step-details">
+                    <div class="step-title">Embedding</div>
+                    <div class="step-description">Generate vectors</div>
+                </div>
+                <div class="step-right-container">
+                    <div class="step-status-text"></div>
+                    <div class="step-timing"></div>
+                    <div class="step-status"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div style="margin-top: 20px; padding: 15px; background: #2d3748; border-radius: 8px;">
+        <h3>🎯 Perfect Layout Structure:</h3>
+        <div style="font-family: monospace; background: #1a202c; padding: 10px; border-radius: 4px; margin: 10px 0;">
+            [Step Title] --- [Status Text] [Time] [Icon]<br>
+            File Upload  --- Completed    1s    ✓<br>
+            Preprocessing --- Processing   9s    ↻<br>
+            Chunking     ---              -     ○<br>
+        </div>
+        <ul>
+            <li><strong>Separate elements:</strong> Status text, timing, and icons are distinct</li>
+            <li><strong>Proper spacing:</strong> 6px gap between all right-side elements</li>
+            <li><strong>Fixed widths:</strong> Status (60px), Time (25px), Icon (18px)</li>
+            <li><strong>No overlap:</strong> Each element has reserved space</li>
+            <li><strong>Right alignment:</strong> All right elements aligned to container end</li>
+        </ul>
+    </div>
+</body>
+</html>
